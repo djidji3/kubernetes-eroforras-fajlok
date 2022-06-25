@@ -1,0 +1,29 @@
+apiVersion: app/v1
+
+kind: ReplicaSet
+
+metadata:
+  name: webserver-replicaset
+  labels:
+    app: webserver-app
+    type: frontend
+
+spec:
+  template:       # itt jon a pod definicioja
+    metadata:
+      name: webserver-pod
+      labels:
+        app: webserver-pod
+        type: frontend
+    spec:         # itt jon a container definicioja
+      containers:
+        - name: nginx
+          image: nginx:1.21
+          ports:
+            - containerPort: 80
+
+  replicas: 3       # hany darab pod fusson ebben a replicaset-ben
+
+  selector:         # ez mondja meg a feltetelt, amely pod-okkal a replicaset kell foglalkozzon
+    matchLabels:    # milyen cimkeju podokkal foglalkozzon
+      type: frontend # a pod metadataja alatt definialtam  ezt a label-t

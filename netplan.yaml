@@ -1,0 +1,17 @@
+network:
+  version: 2
+  renderer: networkd
+  ethernets:
+      mainif:
+          match:
+              macaddress: "de:ad:be:ef:ca:fe"
+          set-name: mainif
+          addresses: [ "10.3.0.5/23" ]
+          nameservers:
+              addresses: 
+                - addresses: 8.8.8.8
+                - addresses: 8.8.4.4
+              search: [ example.com ]
+          routes:
+              - to: default
+                via: 10.3.0.1

@@ -1,0 +1,36 @@
+apiVersion: app/v1
+
+kind: Deployment
+
+metadata:
+  name: webserver-deployment
+  labels:
+    app: webserver-app
+    type: frontend
+
+spec:
+  template:       # itt jon a pod definicioja
+    metadata:
+      name: webserver-pod
+      labels:
+        app: webserver-pod
+        type: frontend
+    spec:            # itt jon a container definicioja
+      containers:
+        - name: nginx
+          image: nginx:1.21
+          ports:
+            - containerPort: 80
+
+  replicas: 6       # hany darab pod fusson ebben a replicaset-ben
+
+  selector:         # ez mondja meg a feltetelt, amely pod-okkal a replicaset kell foglalkozzon
+    matchLabels:    # milyen cimkeju podokkal foglalkozzon
+      type: frontend # a pod metadataja alatt definialtam  ezt a label-t
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1 # mennyivel lehet tobb peldany az eloirtnal
+      maxUnavailable: 1 # mennyivel lehet kevesebb peldany az eloirtnal
+  revisionHistoryLimit: 5 # ennyi korbbi replicaset-re emlekszik hogy vissza tudjak lepni
+  minReadySeconds: 1 # hany mp futas utan tekintjuk egeszsegesnek egy újonnan letrejott podot
