@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: web6
+  labels:
+    name: web6
+spec:
+  containers:
+  - name: web6
+    image: nginx:1.21
+    resources:
+      limits:
+        memory: "128Mi"
+        cpu: "500m"
+    ports:
+      - containerPort: 80
