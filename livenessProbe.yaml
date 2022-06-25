@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: web7
+  labels:
+    name: web7
+spec:
+  containers:
+  - name: web7
+    image: nginx:1.21
+    livenessProbe:        # ujrainditja a podot ha ez nem sikeres
+      exec:               # parancs futtatas a konteneren belul
+        command:         # parancsok (ha a fajl letezik akkor sikeres lesz)
+          - cat         #  cat parancs fusson le
+          - /tmp/healty # ezzel a parameterrel
+      httpGet:          # http get kerest kuldunk a pod-nak
+        path: /allapot  # ezt az ulr-t kerjuk le
+        port: 80         # 80portra kuldi a kerest
+      initialDelaySeconds: 5 #a pod letrejotte utan az ellenorzesek ennyi mp utan kezdodnek
+      periodSeconds: 5  # mennyi mp-kent ismetelje az ellenorzeseke
+      timeoutSeconds: 2 # ennyi mp idotullepest engedunk az ellenorzesnek
+      failureThreshold: 1 # hany db hiba utan tekintsuk, tenylegesen hibasnak az ellenorzest
+
+    resources:
+      limits:
+        memory: "128Mi"
+        cpu: "500m"
+    ports:
+      - containerPort: 80
