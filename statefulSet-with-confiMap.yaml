@@ -1,0 +1,38 @@
+apiVersion: apps/v1  
+kind: StatefulSet
+metadata:
+  name: web
+spec:
+  replicas: 3 #hany peldany akarok
+  serviceName: web
+  selector:
+    matchLabels:
+      app: webapp # az a kontener kell aminek a 'app' label-je 'webapp'
+  template:
+    metadata:
+      labels:
+        app: webapp # cimkezem a kontenert
+    spec:           # a kontener specifikacioja
+      volumes:      # volume is szukseges
+      - name: html  # a statefullset volume neve
+        persistentVolumeClaim: #  ezen belul
+          claimName: html       # html nevu claim-et hasznalom
+      - name: nginx-conf
+        configMap:
+          name: nginx-conf
+          items:
+            - key: default.conf
+              path: default.conf
+      containers:
+      - name: nginx
+        image: nginx:1.21
+        ports:
+        - containerPort: 80
+        volumeMounts: # a statefullset koteteibol a kovetkezot hasznalom
+        - name: html #  statefullsetben levo kotetekbol a html nevut hasznalom
+          mountPath: /usr/share/nginx/html/ # ide csatold
+        - name: nginx-conf
+          mountPath: /etc/nginx/conf.d/default.conf
+          subPath: default.conf
+          readOnly: true  
+      

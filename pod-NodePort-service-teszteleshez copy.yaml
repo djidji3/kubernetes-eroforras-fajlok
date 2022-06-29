@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: web-pod
+  labels:       # a cimkek a pod-ra valo hivatkozaskor fontosak lesznek 
+    name: web
+    type: front-end
+    
+spec:
+  containers:
+  - name: nginx
+    image: nginx:1.22
+    resources:
+      limits:
+        memory: "128Mi"
+        cpu: "500m"
+    ports:
+      - containerPort: 80 # a kontener a 9000-es porton erheto el
+        name: http # ennek a 9000-es portnak adtam egy nevet is

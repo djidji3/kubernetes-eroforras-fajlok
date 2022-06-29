@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: php-pod
+  labels:       # a cimkek a pod-ra valo hivatkozaskor fontosak lesznek 
+    name: php
+    type: back-end
+    
+spec:
+  containers:
+  - name: php-fpm
+    image: php:8.0-fpm
+    resources:
+      limits:
+        memory: "128Mi"
+        cpu: "500m"
+    ports:
+      - containerPort: 9000 # a kontener a 9000-es porton erheto el
+        name: php-fpm # ennek a 9000-es portnak adtam egy nevet is

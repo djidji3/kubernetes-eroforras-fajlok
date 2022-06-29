@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Service
+metadata:   # fontos a service-re valo hivatkozaskor a cimkezese
+  labels:
+    type: back-end
+    name: php
+  name: php-service
+spec:
+  type: ClusterIP #ez esetben csak a clusteren belul lesz elerheto
+  
+  selector: # pod cimkek megadasa, amelyek fele kell iranyitani a forgalmat
+    app: back-end
+    name: php
+  
+  ports:
+  - port: 9000 # ezen a porton erheto el a service
+    targetPort: php-fpm # a service ezen eri el a pod-ot (a pod-ban megadottakal egyezoen)
+    protocol: TCP
+    name: php-fpm # service port neve (opcionalis)
+  

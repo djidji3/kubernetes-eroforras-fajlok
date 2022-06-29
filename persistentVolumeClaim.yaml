@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: html
+spec:
+  resources:
+    requests:
+      storage: 1Gi
+  accessModes:
+    - ReadWriteMany # azert hogy tudjak bele tartalmat masolni. Osszes pod tudja irasra csatolni (pl:nfs)

@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Pod     # erofottas fajtaja
+metadata:     
+  apiVersion: v1
+  kind: Namespace
+  metadata:
+    name:  prod
+  name: webserver1 
+  labels:   # kesobb a cimkezesben megadottak alapjan tudok hivatkozi eroforrasok csoportjara
+    name: webserver1
+spec:
+  containers:
+  - name: webserver1
+    image: nginx:1.21
+    resources:
+      limits:
+        memory: "128Mi"
+        cpu: "500m"
+    ports:
+      - containerPort: 80 #  kontener 80 portjat teszi elorhetove a clasteren belul
