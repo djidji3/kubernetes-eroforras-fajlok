@@ -1,0 +1,15 @@
+# EROFORRAS:
+apiVersion: v1  
+kind: Service
+metadata:
+  name: web
+
+# EROFORRAS SPECIFIKACIO:
+spec:
+  type: ClusterIP # clusteren belul elerheto ip (vagy External,NodeIP)
+  ports:
+  - port: 80        # service port 
+    targetPort: 80  # pod port
+    name: web       # port neve
+  selector:         # valaszd ki a podokat (melyeken alkalmazni kell ezt az eroforrast)
+    app: web-pod     # ahol az 'app' label erteke 'web-pod'

@@ -1,0 +1,19 @@
+apiVersion: apps/v1  
+kind: Deployment
+metadata:
+  name: web
+spec:
+  replicas: 1 #hany peldany akarok
+  selector:
+    matchLabels:
+      app: webapp # az a kontener kell aminek a 'app' label-je 'webapp'
+  template:
+    metadata:
+      labels:
+        app: webapp # cimkezem a kontenert
+    spec:           # a kontener specifikacioja
+      containers:
+      - name: nginx
+        image: nginx:1.21
+        ports:
+        - containerPort: 80

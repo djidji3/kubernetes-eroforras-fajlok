@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: Pod
+metadata:             # ezzel azonosithatova teszem az eroforrast, igy kesobb hivatkozhatok ra
+  name: web-pod
+  labels:             # ezen cimkekkel tudok majd hivatkozni erre az eroforrasra
+    nev: web-pod
+
+spec:                  # mi legyen az eroforrasban
+  containers:          # kontererek megadasa
+  - name: nginx        # az 1. container name kulcsa
+    image: nginx:1.21  # az 1. container image:verzio
+    ports:             # az eroforras,mely portajainak megadasa
+    - containerPort: 80 # az 1. port a 80-as
+
+---
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: web-pod2
+  labels:
+    nev: web-pod2
+
+spec:                  # mi legyen az eroforrasban
+  containers:          # kontererek megadasa
+  - name: web2        # az 1. container name kulcsa
+    image: nginx:1.21  # az 1. container image:verzio
+    ports:             # az eroforras,mely port
+    - containerPorts: 8080
+---

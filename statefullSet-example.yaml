@@ -1,0 +1,42 @@
+# EROFORRAS:
+apiVersion: apps/v1  
+kind: StatefulSet
+metadata:  # ezzel azonosithatova teszem az eroforrast, igy kesobb hivatkozhatok ra
+  name: web-statefulset
+  labels: # ezen cimkekkel tudok majd hivatkozni erre az eroforrasra
+    nev: web-statefulset
+
+# EROFORRAS SPECIFIKACIO:    
+spec:
+  replicas: 3 #hany peldany akarok
+  
+  serviceName: web-service # ezt a nevu service-t hasznald
+  
+  selector:  # valaszd ki a podokat (melyeken alkalmazni kell ezt az eroforrast)
+    matchLabels: # cimkek alapjan valaszd ki a podokat
+      app: webapp # ahol az 'app' label erteke 'webapp'
+  
+    # POD:
+  template:    # egy teljes POD-ot leiro eroforras tartalma
+    metadata:
+      labels:
+        app: webapp 
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.21
+        ports:
+        - containerPort: 80
+
+# POD specifikacio kiegeszitese Volume specifikacioval
+      volumes:  # volume megadas kovetkezik
+        - name: html-volume # volume neve statefulset-en belul legyen ez
+          persistentVolumeClaim: # volume tipusa legyen ez
+            claimName: pvc-eroforras # a tipuson belul legyen ez
+
+# Volume POD-hoz rendelese:
+        volumeMounts:
+          - name: html-volume
+            mountPath: /usr/share/nginx/html/
+
+

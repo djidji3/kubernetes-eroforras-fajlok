@@ -1,0 +1,27 @@
+# EROFORRAS:
+apiVersion: apps/v1  
+kind: Deployment
+metadata:   # ezzel azonosithatova teszem az eroforrast, igy kesobb hivatkozhatok ra
+  name: web-pods-deployment
+  labels:    # ezen cimkekkel tudok majd hivatkozni erre az eroforrasra
+    nev: deployment1
+
+# EROFORRAS SPECIFIKACIO:
+spec:
+  replicas: 2 # hany peldany akarok futtatni a konterenerbol, melyekre alkalmazom a deploymentet
+  
+  selector:   # valaszd ki a podokat (melyeken alkalmazni kell ezt az eroforrast)
+    matchLabels: # cimkek alapjan valaszd ki a podokat
+      app: webapp # ahol az 'app' label erteke 'webapp'
+  
+  # POD:
+  template:   # egy teljes POD-ot leiro eroforras tartalma
+    metadata: 
+      labels:
+        nev: web-pod 
+    spec:         
+      containers:
+      - name: nginx
+        image: nginx:1.21
+        ports:
+        - containerPort: 80

@@ -1,0 +1,9 @@
+apiVersion: v1  
+kind: PersistentVolumeClaim
+metadata:
+  name: html
+spec:
+  accesModes: [ReadWriteMany]
+  resources: 
+    requests:
+      storage: 1Gi

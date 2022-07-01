@@ -1,0 +1,17 @@
+# EROFORRAS:
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata: # ezzel azonosithatova teszem az eroforrast, igy kesobb hivatkozhatok ra
+  name: pvc-eroforras
+  labels:  # ezen cimkekkel tudok majd hivatkozni erre az eroforrasra
+    nev: pvc-eroforras
+
+# EROFORRAS SPECIFIKACIO:  
+spec:
+  accessModes:  # a storage irhato/olvashato legyen-e
+    - ReadWriteMany
+  
+  resources: # eroforras megadas kovetkezik
+    requests: # igenyles megadasa kovetkezik
+      storage: 1Gi # 1GB adatterulet 
+
