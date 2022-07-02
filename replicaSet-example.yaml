@@ -8,7 +8,7 @@ metadata: # ezzel azonosithatova teszem az eroforrast, igy kesobb hivatkozhatok 
     type: tanfolyam-replicaset
 
 # POD DEFINICIO.
-spec:              # a replicaSet specifikacio.
+spec:             
   template:       #  teljes pod template definicio kovetkezik
     metadata:
       name: web-app-pod

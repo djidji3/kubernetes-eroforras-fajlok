@@ -1,27 +1,30 @@
-# EROFORRAS:
-apiVersion: apps/v1  
-kind: Deployment
-metadata:   # ezzel azonosithatova teszem az eroforrast, igy kesobb hivatkozhatok ra
-  name: web-pods-deployment
-  labels:    # ezen cimkekkel tudok majd hivatkozni erre az eroforrasra
-    nev: deployment1
+# EROFORRAS DEFINICIO:
+apiVersion: apps/v1
+kind: Deployment  # eroforras fajtaja
+metadata: # ezzel azonosithatova teszem az eroforrast, igy kesobb hivatkozhatok ra.
+  name: webserver-deployment
+  labels:      # ezen cimkekkel tudok majd hivatkozni erre az eroforrasra
+    app: web-app-deployment
+    type: tanfolyam-deployment
 
-# EROFORRAS SPECIFIKACIO:
-spec:
-  replicas: 2 # hany peldany akarok futtatni a konterenerbol, melyekre alkalmazom a deploymentet
-  
-  selector:   # valaszd ki a podokat (melyeken alkalmazni kell ezt az eroforrast)
-    matchLabels: # cimkek alapjan valaszd ki a podokat
-      app: webapp # ahol az 'app' label erteke 'webapp'
-  
-  # POD:
-  template:   # egy teljes POD-ot leiro eroforras tartalma
-    metadata: 
+# POD DEFINICIO.
+spec:             
+  template:       #  teljes pod template definicio kovetkezik
+    metadata:
+      name: web-app-pod
       labels:
-        nev: web-pod 
-    spec:         
+        app: web-app-label
+        type: tanfolyam-label
+    spec:
       containers:
-      - name: nginx
-        image: nginx:1.21
-        ports:
-        - containerPort: 80
+        - name: nginx
+          image: nginx:1.21
+          ports:
+            - containerPort: 80
+
+# DEPLOYMENT SPECIFIKUS DEFINICIO:
+  replicas: 3       # hany darab pod fusson ebben a deployment-ben
+  selector:         # meghatarozza hogy mely pod-okra illeszkedik ez a deployment
+    matchLabels:    # cimke egyezes alapjan
+      app: web-app-label # konkret pod cimkek.
+      type: tanfolyam-label # konkret pod cimkek
