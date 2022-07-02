@@ -1,3 +1,4 @@
+# EROFORRAS DEFINICIO:
 apiVersion: v1
 kind: Pod             # eroforras fajtaja
 metadata:             # ezzel azonosithatova teszem az eroforrast, igy kesobb hivatkozhatok ra
@@ -5,6 +6,7 @@ metadata:             # ezzel azonosithatova teszem az eroforrast, igy kesobb hi
   labels:             # ezen cimkekkel tudok majd hivatkozni erre az eroforrasra
     nev: web-pod
 
+# POD DEFINICIO
 spec:                  # eroforras specifikacio kovetkezik
   containers:          # kontenerek eroforras specifikacioja kovetkezik
   - name: nginx        # az 1. container name kulcsa
@@ -12,7 +14,10 @@ spec:                  # eroforras specifikacio kovetkezik
     ports:             # az eroforras elerheto portjai
     - containerPort: 80 # az 1. port a 80-as
 
----                     # tobb yaml fajl elvalasztasa
+---                     # tobb yaml fajl helyett ezt is hasznalhatom
+
+
+
 
 apiVersion: v1
 kind: Pod            # eroforras fajtaja
@@ -23,8 +28,8 @@ metadata:             # ezzel azonosithatova teszem az eroforrast, igy kesobb hi
 
 spec:                  # mi legyen az eroforrasban
   containers:          # kontererek megadasa
-  - name: web2        # az 1. container name kulcsa
-    image: nginx:1.21  # az 1. container image:verzio
+  - name: busybox        # az 1. container name kulcsa
+    image: busybox:1.28  # az 1. container image:verzio
     ports:             # az eroforras,mely port
     - containerPort: 8080
 ---

@@ -1,0 +1,30 @@
+# EROFORRAS DEFINICIO:
+apiVersion: apps/v1
+kind: ReplicaSet  # eroforras fajtaja
+metadata: # ezzel azonosithatova teszem az eroforrast, igy kesobb hivatkozhatok ra.
+  name: webserver-replicaset
+  labels:      # ezen cimkekkel tudok majd hivatkozni erre az eroforrasra
+    app: web-app-replicaset
+    type: tanfolyam-replicaset
+
+# POD DEFINICIO.
+spec:              # a replicaSet specifikacio.
+  template:       #  teljes pod template definicio kovetkezik
+    metadata:
+      name: web-app-pod
+      labels:
+        app: web-app-label
+        type: tanfolyam-label
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:1.21
+          ports:
+            - containerPort: 80
+
+# REPLICASET SPECIFIKUS DEFINICIO:
+  replicas: 3       # hany darab pod fusson ebben a replicaset-ben
+  selector:         # meghatarozza hogy mely pod-okra illeszkedik ez a replicaSet
+    matchLabels:    # cimke egyezes alapjan
+      app: web-app-label # konkret pod cimkek.
+      type: tanfolyam-label # konkret pod cimkek
