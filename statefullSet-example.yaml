@@ -1,42 +1,54 @@
-# EROFORRAS:
-apiVersion: apps/v1  
-kind: StatefulSet
-metadata:  # ezzel azonosithatova teszem az eroforrast, igy kesobb hivatkozhatok ra
-  name: web-statefulset
-  labels: # ezen cimkekkel tudok majd hivatkozni erre az eroforrasra
-    nev: web-statefulset
+# EROFORRAS DEFINICIO:
+apiVersion: apps/v1
+kind: StatefulSet  # eroforras fajtaja
+metadata: # ezzel azonosithatova teszem az eroforrast, igy kesobb hivatkozhatok ra.
+  name: webserver-statefulSet
+  labels:      # ezen cimkekkel tudok majd hivatkozni erre az eroforrasra
+    app: web-app-statefulSet
+    type: tanfolyam-statefulSet
 
-# EROFORRAS SPECIFIKACIO:    
-spec:
-  replicas: 3 #hany peldany akarok
-  
-  serviceName: web-service # ezt a nevu service-t hasznald
-  
-  selector:  # valaszd ki a podokat (melyeken alkalmazni kell ezt az eroforrast)
-    matchLabels: # cimkek alapjan valaszd ki a podokat
-      app: webapp # ahol az 'app' label erteke 'webapp'
-  
-    # POD:
-  template:    # egy teljes POD-ot leiro eroforras tartalma
+# POD DEFINICIO.
+spec:             
+  template:       #  teljes pod template definicio kovetkezik
     metadata:
+      name: web-app-pod
       labels:
-        app: webapp 
+        app: web-app-label
+        type: tanfolyam-label
     spec:
       containers:
-      - name: nginx
-        image: nginx:1.21
-        ports:
-        - containerPort: 80
+        - name: nginx
+          image: nginx:1.21
+          ports:
+            - containerPort: 80
 
-# POD specifikacio kiegeszitese Volume specifikacioval
-      volumes:  # volume megadas kovetkezik
-        - name: html-volume # volume neve statefulset-en belul legyen ez
-          persistentVolumeClaim: # volume tipusa legyen ez
-            claimName: pvc-eroforras # a tipuson belul legyen ez
+# POD DEFINICION BELULI VOLUME SPECIFIKUS DEFINICIO
+      volumes:      # volume is szukseges
+      - name: html  # a statefullset volume neve
+        persistentVolumeClaim: #  ezen belul
+          claimName: html       # html nevu claim-et hasznalom
+        
+        volumeMounts: # a statefullset koteteibol a kovetkezot hasznalom
+        - name: html #  statefullset ilyen nevu volume-t kerem
+          mountPath: /usr/share/nginx/html/ # ide csatold
 
-# Volume POD-hoz rendelese:
-        volumeMounts:
-          - name: html-volume
-            mountPath: /usr/share/nginx/html/
+# DEPLOYMENT SPECIFIKUS DEFINICIO:
+  serviceName: kubernetes
+  
+  replicas: 3       # hany darab pod fusson ebben a deployment-ben
+  selector:         # meghatarozza hogy mely pod-okra illeszkedik ez a deployment
+    matchLabels:    # cimke egyezes alapjan
+      app: web-app-label # konkret pod cimkek.
+      type: tanfolyam-label # konkret pod cimkek
+  
+  strategy:   # deployment strategiat hatarozza meg
+    type: RollingUpdate # mindig uj replicaSet, fel/le skalazasal
+    rollingUpdate:
+      maxSurge: 1 # az eloirt feletti peldenyszam max ennyi legyen
+      maxUnavailable: 1 # az eloirt alatti peldenyszam max ennyi legyen
+  
+  revisionHistoryLimit: 5 # elozo replicasetek szama
+  
+  minReadySeconds: 1 # hany mp futas utan egeszseges egy letrejott pod  
 
 

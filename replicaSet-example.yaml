@@ -13,8 +13,8 @@ spec:
     metadata:
       name: web-app-pod
       labels:
-        app: web-app-label
-        type: tanfolyam-label
+        app: web-app-label  # has to match .spec.selector.matchLabels
+        type: tanfolyam-label # has to match .spec.selector.matchLabels
     spec:
       containers:
         - name: nginx
@@ -26,5 +26,5 @@ spec:
   replicas: 3       # hany darab pod fusson ebben a replicaset-ben
   selector:         # meghatarozza hogy mely pod-okra illeszkedik ez a replicaSet
     matchLabels:    # cimke egyezes alapjan
-      app: web-app-label # konkret pod cimkek.
-      type: tanfolyam-label # konkret pod cimkek
+      app: web-app-label # konkret pod cimkek. Has to match .spec.template.metadata.labels
+      type: tanfolyam-label # konkret pod cimkek. Has to match .spec.template.metadata.labels

@@ -2,26 +2,30 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: web
+
 spec:
   replicas: 3 #hany peldany akarok
   serviceName: web
   selector:
     matchLabels:
       app: webapp # az a kontener kell aminek a 'app' label-je 'webapp'
+  
   template:
     metadata:
       labels:
         app: webapp # cimkezem a kontenert
     spec:           # a kontener specifikacioja
-      volumes:      # volume is szukseges
-      - name: html  # a statefullset volume neve
-        persistentVolumeClaim: #  ezen belul
-          claimName: html       # html nevu claim-et hasznalom
       containers:
       - name: nginx
         image: nginx:1.21
         ports:
         - containerPort: 80
+      
+      volumes:      # volume is szukseges
+      - name: html  # a statefullset volume neve
+        persistentVolumeClaim: #  ezen belul
+          claimName: html       # html nevu claim-et hasznalom
+        
         volumeMounts: # a statefullset koteteibol a kovetkezot hasznalom
         - name: html #  statefullset ilyen nevu volume-t kerem
           mountPath: /usr/share/nginx/html/ # ide csatold

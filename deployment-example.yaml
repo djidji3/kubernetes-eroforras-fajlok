@@ -23,8 +23,18 @@ spec:
             - containerPort: 80
 
 # DEPLOYMENT SPECIFIKUS DEFINICIO:
-  replicas: 3       # hany darab pod fusson ebben a deployment-ben
+  replicas: 1       # hany darab pod fusson ebben a deployment-ben
   selector:         # meghatarozza hogy mely pod-okra illeszkedik ez a deployment
     matchLabels:    # cimke egyezes alapjan
       app: web-app-label # konkret pod cimkek.
       type: tanfolyam-label # konkret pod cimkek
+  
+  strategy:   # deployment strategiat hatarozza meg
+    type: RollingUpdate # mindig uj replicaSet, fel/le skalazasal
+    rollingUpdate:
+      maxSurge: 1 # az eloirt feletti peldenyszam max ennyi legyen
+      maxUnavailable: 1 # az eloirt alatti peldenyszam max ennyi legyen
+  
+  revisionHistoryLimit: 5 # elozo replicasetek szama
+  
+  minReadySeconds: 1 # hany mp futas utan egeszseges egy letrejott pod  
