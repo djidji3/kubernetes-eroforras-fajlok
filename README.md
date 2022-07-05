@@ -28,6 +28,10 @@ dns alapjan tovabbitja a forgalmat
 Kulon kell telepiteni, nem resze a kubernetesnek
 Egyik megvalositas a CoreDNS
 
+# LoadBalancer
+Microk8s alatt van egy bekapcsolhato LoadBalancer szolgaltatas a Metallb
+Clusteren kivuli HA szolgaltatas, mely a kulso publikus ipcimre erkezo kereseket tovabbitja vmelyik NODE-nak,ami pedig veletlenszeruen tovabbitja vmelyik POD-nak
+
 # ConfigMap
 Beallitasok, fajlok tarolasara
 
@@ -38,3 +42,8 @@ Persistent adattarolot definail
 
 # PersistentVolumeClaim
 Adattarolas dinamikus hozzarendelesse
+
+# NameSpaces
+A nevtereket a kornyezet elvalasztasara hasznaljuk, pl. deployment, testing, production kornyezet szetvalasztasara.
+Eroforrasok, jogosultasagok kulon szabalyozhatok 
+
