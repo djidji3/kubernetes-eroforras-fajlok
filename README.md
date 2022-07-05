@@ -13,6 +13,21 @@ Olyan Deployment ami storage definiciot is tartalmaz
 # DaemaonSet
 Olyan StatefulSet ami kepes  a POD-ok statikus szetosztasara a Node-ok kozott
 
+# Service
+A POD-ok elereset biztositja
+ClusterIP:
+ a clusteren beluli elereshez. A POD-ok egymas kozti kommunikaciojahoz. Jellemzoen frontend-backend kommunikaciohoz. Iptables nat parancsokkal oldja meg
+NodePort:
+a kulso elereshez. A cluster osszes NODE-jan elereheto lesz egy fix porton
+LoadBalancer:
+felhoszolgaltatok terheles-eloszto rendszeren keresztul erheto el
+ExternalName:
+dns alapjan tovabbitja a forgalmat
+
+# DNS
+Kulon kell telepiteni, nem resze a kubernetesnek
+Egyik megvalositas a CoreDNS
+
 # ConfigMap
 Beallitasok, fajlok tarolasara
 
