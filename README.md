@@ -10,7 +10,7 @@ Podok gyujtemenye,melyeket egyben lehet kezelni,de ez mar a modositaskor Rolling
 # StatefulSet
 Olyan Deployment ami storage definiciot is tartalmaz
 
-# DaemaonSet
+# DaemonSet
 Olyan StatefulSet ami kepes  a POD-ok statikus szetosztasara a Node-ok kozott
 
 # Service
