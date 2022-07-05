@@ -23,7 +23,6 @@ LoadBalancer:
 felhoszolgaltatok terheles-eloszto rendszeren keresztul erheto el
 ExternalName:
 dns alapjan tovabbitja a forgalmat
-
 # DNS
 Kulon kell telepiteni, nem resze a kubernetesnek
 Egyik megvalositas a CoreDNS
@@ -32,6 +31,9 @@ Egyik megvalositas a CoreDNS
 Microk8s alatt van egy bekapcsolhato LoadBalancer szolgaltatas a Metallb
 Clusteren kivuli HA szolgaltatas, mely a kulso publikus ipcimre erkezo kereseket tovabbitja vmelyik NODE-nak,ami pedig veletlenszeruen tovabbitja vmelyik POD-nak
 
+# Ingress
+
+# Kornyezeti valtozok
 # ConfigMap
 Beallitasok, fajlok tarolasara
 
@@ -46,4 +48,8 @@ Adattarolas dinamikus hozzarendelesse
 # NameSpaces
 A nevtereket a kornyezet elvalasztasara hasznaljuk, pl. deployment, testing, production kornyezet szetvalasztasara.
 Eroforrasok, jogosultasagok kulon szabalyozhatok 
+
+
+
+
 
