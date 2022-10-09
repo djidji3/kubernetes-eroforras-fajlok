@@ -1,0 +1,38 @@
+# EROFORRAS DEFINICIO:
+apiVersion: apps/v1
+kind: Deployment  # eroforras fajtaja
+metadata: # ezzel azonosithatova teszem az eroforrast, igy kesobb hivatkozhatok ra.
+  name: php-deployment
+  labels:      # ezen cimkekkel tudok majd hivatkozni erre az eroforrasra
+    app: php-deployment
+    type: backend
+
+# POD DEFINICIO.
+spec:             
+  template:       #  teljes pod template definicio kovetkezik
+    metadata:
+      name: php-pod  
+      labels:         # pod cimkek
+        app: php
+        type: backend
+    spec:
+      containers:
+        - name: php-fpm
+          image: php-fpm:8.1
+          ports:
+            - containerPort: 9000
+            
+
+# DEPLOYMENT SPECIFIKUS DEFINICIO:
+  replicas: 1       # hany darab pod fusson ebben a deployment-ben
+  selector:         # meghatarozza hogy mely pod-okra illeszkedik ez a deployment
+    matchLabels:    # cimke egyezes alapjan
+      app: php # konkret pod cimkek.
+      type: backend # konkret pod cimkek
+  strategy:   # deployment strategiat hatarozza meg
+    type: RollingUpdate # mindig uj replicaSet, fel/le skalazasal
+    rollingUpdate:
+      maxSurge: 1 # az eloirt feletti peldenyszam max ennyi legyen
+      maxUnavailable: 1 # az eloirt alatti peldenyszam max ennyi legyen
+  revisionHistoryLimit: 5 # elozo replicasetek szama
+  minReadySeconds: 1 # hany mp futas utan egeszseges egy letrejott pod 
