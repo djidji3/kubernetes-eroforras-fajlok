@@ -1,0 +1,106 @@
+apiVersion: v1
+kind: Service
+metadata:   # fontos a service-re valo hivatkozaskor a cimkezese
+  name: web-service
+  labels:
+    type: frontend
+    name: web
+spec:
+  type: NodePort # ez esetben kibul belul belul elerheto lesz
+  
+  selector: # pod cimkek megadasa, amelyek fele kell iranyitani a forgalmat
+    app: web
+    type: frontend
+  
+  ports:
+  - port: 80 # ezen a porton erheto el a service belul (ClasterIP)
+    targetPort: 80  # a service ezen eri el a pod-ot (a pod-ban megadottakal egyezoen)
+    nodePort: 30015 # konkretan is megadhatom a kulso portot, ha akarom
+  - port: 443 # ezen a porton erheto el a service belul (ClasterIP)
+    targetPort: 443  # a service ezen eri el a pod-ot (a pod-ban megadottakal egyezoen)
+    nodePort: 30016 # konkretan is megadhatom a kulso portot, ha akarom
+
+---
+
+# EROFORRAS DEFINICIO:
+apiVersion: apps/v1
+kind: Deployment  # eroforras fajtaja
+metadata: # ezzel azonosithatova teszem az eroforrast, igy kesobb hivatkozhatok ra.
+  name: php-deployment
+  labels:      # ezen cimkekkel tudok majd hivatkozni erre az eroforrasra
+    app: php-deployment
+    type: backend
+
+# POD DEFINICIO.
+spec:             
+  template:       #  teljes pod template definicio kovetkezik
+    metadata:
+      name: php-pod  
+      labels:         # pod cimkek
+        app: php
+        type: backend
+    spec:
+      containers:
+        - name: php-fpm
+          image: php-fpm:8.1
+          ports:
+            - containerPort: 9000
+            
+
+# DEPLOYMENT SPECIFIKUS DEFINICIO:
+  replicas: 1       # hany darab pod fusson ebben a deployment-ben
+  selector:         # meghatarozza hogy mely pod-okra illeszkedik ez a deployment
+    matchLabels:    # cimke egyezes alapjan
+      app: php # konkret pod cimkek.
+      type: backend # konkret pod cimkek
+  strategy:   # deployment strategiat hatarozza meg
+    type: RollingUpdate # mindig uj replicaSet, fel/le skalazasal
+    rollingUpdate:
+      maxSurge: 1 # az eloirt feletti peldenyszam max ennyi legyen
+      maxUnavailable: 1 # az eloirt alatti peldenyszam max ennyi legyen
+  revisionHistoryLimit: 5 # elozo replicasetek szama
+  minReadySeconds: 1 # hany mp futas utan egeszseges egy letrejott pod 
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:   # fontos a service-re valo hivatkozaskor a cimkezese
+  labels:
+    name: php-service
+    
+spec:
+  type: ClusterIP #ez esetben csak a clusteren belul lesz elerheto
+  
+  selector: # pod cimkek megadasa, amelyek fele kell iranyitani a forgalmat
+    app: php
+    type: backend
+  
+  ports:
+  - port: 9000 # ezen a porton erheto el a service
+    targetPort: 9000 # a service ezen eri el a pod-ot (a pod-ban megadottakal egyezoen)
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:   # fontos a service-re valo hivatkozaskor a cimkezese
+  name: web-service
+  labels:
+    type: frontend
+    name: web
+spec:
+  type: NodePort # ez esetben kibul belul belul elerheto lesz
+  
+  selector: # pod cimkek megadasa, amelyek fele kell iranyitani a forgalmat
+    app: web
+    type: frontend
+  
+  ports:
+  - port: 80 # ezen a porton erheto el a service belul (ClasterIP)
+    targetPort: 80  # a service ezen eri el a pod-ot (a pod-ban megadottakal egyezoen)
+    nodePort: 30015 # konkretan is megadhatom a kulso portot, ha akarom
+  - port: 443 # ezen a porton erheto el a service belul (ClasterIP)
+    targetPort: 443  # a service ezen eri el a pod-ot (a pod-ban megadottakal egyezoen)
+    nodePort: 30016 # konkretan is megadhatom a kulso portot, ha akarom
+
