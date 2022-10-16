@@ -1,0 +1,125 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deployment-frontend-http
+  labels:
+    app: dev
+    type: front-end
+    name: web
+spec:
+  replicas: 1
+  selector:
+    matchLabels:      
+      app: dev
+      type: front-end
+      name: web
+  template:
+    metadata:
+      labels:
+        app: dev
+        type: front-end
+        name: web
+    spec:
+      containers:
+      - name: apache
+        image: smartopsacademy/apache:latest
+        ports:
+        - containerPort: 80
+          name: http
+        env:
+        - name: FCGI
+          value: php-clusterip-svc:9000
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deployment-backend-php
+  labels:
+    app: dev
+    type: back-end
+    name: php
+spec:
+  replicas: 1
+  selector:
+    matchLabels:      
+      app: dev
+      type: back-end
+      name: php
+  template:
+    metadata:
+      labels:
+        app: dev
+        type: back-end
+        name: php
+    spec:
+      containers:
+      - name: php
+        image: smartopsacademy/php:alpine
+        ports:
+        - containerPort: 9000
+          name: php
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-nodeport-svc
+  labels:
+    app: dev
+    type: front-end
+    name: web
+spec:
+  type: NodePort
+  ports:
+  - name: http
+    port: 80
+    targetPort: 80
+  selector:
+    app: dev
+    type: front-end
+    name: web
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-clusterip-svc
+  labels:
+    app: dev
+    type: front-end
+    name: web
+spec:
+  type: ClusterIP
+  ports:
+  - name: http
+    port: 80
+    targetPort: 80
+  selector:
+    app: dev
+    type: front-end
+    name: web
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: php-clusterip-svc
+  labels:
+    app: dev
+    type: back-end
+    name: php
+spec:
+  type: ClusterIP
+  ports:
+  - name: php
+    port: 9000
+    targetPort: 9000
+  selector:
+    app: dev
+    type: back-end
+    name: php
