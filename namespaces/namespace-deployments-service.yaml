@@ -1,0 +1,81 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: php-deployment
+  labels:
+    app: devopsakademia
+    type: back-end
+    name: php
+spec:
+  replicas: 1
+  selector:
+    matchLabels:      
+      app: devopsakademia
+      type: back-end
+      name: php
+  template:
+    metadata:
+      labels:
+        app: devopsakademia
+        type: back-end
+        name: php
+    spec:
+      containers:
+      - name: php
+        image: smartopsacademy/php:alpine
+        ports:
+        - containerPort: 9000
+          name: php
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: php
+  labels:
+    app: devopsakademia
+    type: back-end
+    name: php
+spec:
+  type: ClusterIP
+  ports:
+  - name: php
+    port: 9000
+    targetPort: php
+  selector:
+    app: devopsakademia
+    type: back-end
+    name: php
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-deployment
+  labels:
+    app: devopsakademia
+    type: front-end
+    name: web
+spec:
+  replicas: 1
+  selector:
+    matchLabels:      
+      app: devopsakademia
+      type: front-end
+      name: web
+  template:
+    metadata:
+      labels:
+        app: devopsakademia
+        type: front-end
+        name: web
+    spec:
+      containers:
+      - name: apache
+        image: smartopsacademy/apache:latest
+        ports:
+        - containerPort: 80
+          name: http
+        env:
+        - name: FCGI
+          value: php:9000
