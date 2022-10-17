@@ -3,6 +3,7 @@ kind: Service
 metadata:   # fontos a service-re valo hivatkozaskor a cimkezese
   labels:
     name: php-service
+    namespace: default
     
 spec:
   type: ClusterIP #ez esetben csak a clusteren belul lesz elerheto
