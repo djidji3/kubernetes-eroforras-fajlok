@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "web-pod"
+ #namespace: prod # ebben a nevterben fog indulni a pod, de jobb parancssorbol megadni
+  labels:
+    app: "web-pod"
+spec:
+  containers:
+  - name: nginx
+    image: "nginx:1.22"
+    resources:
+      limits:
+        cpu: 200m
+        memory: 300Mi
+      requests:
+        cpu: 100m
+        memory: 200Mi
+    ports:
+      - containerPort:  80
+        name:  http
+
