@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: web-config
+data:
+  FCGI: "php:9000"
+  SERVERNAME: "file-test"
+  HTTPORT: "80"
+  SERVERADMIN: "djidji@freemail.hu"
+  mpm.conf: |
+    # Use the web-config ConfigMap
+    LoadModule mpm_event_module /usr/lib/apache2/mod_mpm_event.so
+    <IfModule mpm_event_module>
+      StartServers             10
+      ServerLimit              25
+      MinSpareThreads           5
+      MaxSpareThreads          50
+      ThreadsPerChild           5
+      MaxRequestWorkers       100
+      MaxConnectionsPerChild  100
+    </IfModule>
+  01main.conf: |
+    # Use the web-config ConfigMap
+    Listen 80
+    ServerAdmin czako.krisztian@devopsakademia.com
+    ServerName devopsakademia.com:80
+    DocumentRoot "/var/www/localhost/htdocs/"
+    <Directory "/var/www/localhost/htdocs/">
+      Options Indexes FollowSymLinks
+      AllowOverride All
+      Require all granted
+    </Directory>

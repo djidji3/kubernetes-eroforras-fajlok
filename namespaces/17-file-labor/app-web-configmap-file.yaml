@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web
+  labels:
+    app: devopsakademia
+    type: front-end
+    name: web
+spec:
+  replicas: 3
+  selector:
+    matchLabels:      
+      app: devopsakademia
+      type: front-end
+      name: web
+  template:
+    metadata:
+      labels:
+        app: devopsakademia
+        type: front-end
+        name: web
+    spec:
+      containers:
+      - name: apache
+        image: smartopsacademy/apache:latest
+        ports:
+        - containerPort: 80
+          name: http
+        volumeMounts:           # minden kontener szamara a volumes-ban mar letezo koteteket tudok csatolni
+        - name: web-config      # ez definialva van a volumes-ben, ezert itt tudom hasznalni
+          mountPath: /etc/apache2/conf.d/mpm.conf # a containerben ide csatold
+          subPath: mpm.conf     # a path alatti erteket adom itt is meg
+          readOnly: true        # nem lesz a kontainben irhato 
+        - name: web-config
+          mountPath: /etc/apache2/conf.d/01main.conf
+          subPath: 01main.conf
+          readOnly: true
+      volumes:                  # az osszes containerre ervenyesul
+        - name: web-config      # a volume neve, amit hasznal fog a configMap . Legjobb ha a ketto megegyezik
+          configMap:
+            name: web-config    # configMap neve
+            items:
+              - key: mpm.conf     # a configMap ezen kulcsara hivatkozok
+                path: mpm.conf    # erre a volumeMount subPath-nel hivatkozok
+              - key: 01main.conf
+                path: 01main.conf

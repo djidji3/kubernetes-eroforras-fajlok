@@ -1,0 +1,71 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: php
+  labels:
+    app: devopsakademia
+    type: back-end
+    name: php
+spec:
+  replicas: 3
+  selector:
+    matchLabels:      
+      app: devopsakademia
+      type: back-end
+      name: php
+  template:
+    metadata:
+      labels:
+        app: devopsakademia
+        type: back-end
+        name: php
+    spec:
+      containers:
+      - name: php
+        image: smartopsacademy/php:alpine
+        ports:
+        - containerPort: 9000
+          name: php
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: php
+  labels:
+    app: devopsakademia
+    type: back-end
+    name: php
+spec:
+  type: ClusterIP
+  ports:
+  - name: php
+    port: 9000
+    targetPort: php
+  selector:
+    app: devopsakademia
+    type: back-end
+    name: php
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: web
+  labels:
+    app: devopsakademia
+    type: front-end
+    name: web
+spec:
+  type: LoadBalancer
+  loadBalancerIP: ${LB_IP}
+  ports:
+  - name: http
+    protocol: TCP
+    port: 80
+    targetPort: http
+  selector:
+    app: devopsakademia
+    type: front-end
+    name: web
+
+  
+
